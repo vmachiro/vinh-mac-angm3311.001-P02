@@ -20,7 +20,13 @@ class Grid():
     # TODO:
     # define a method that populates the houses onto the map using House()
     #   instance a House() object
+    house1 = house.House()
+    # set the variables for default testing
+    house1 = 
+    #   build the houses
+    house1.build()
     #   make. the houses based on set default parameters within the class
+
 
     # TODO:
     # define a method that flips the groups of houses to face different directions
