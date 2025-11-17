@@ -96,10 +96,7 @@ class Grid():
         self.roads = 0 # for now, this just determines whether or not there are roads
 
     def create_plane(self, num_of_houses, house_width):
-        house1 = hs.House()
-        house1.number_of_houses = 3 # testing default, will be changed later thru gui
-        house1.build()
-        
+       
         scale = house_width*num_of_houses
         cmds.polyPlane(n='plane', sx=5, sy=5, w=(scale), h=(scale))
 
