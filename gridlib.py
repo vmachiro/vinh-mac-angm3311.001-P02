@@ -95,26 +95,26 @@ class Grid():
         self.population_scale = 1 # this determines how many houses are on each square/grid
         self.roads = 0 # for now, this just determines whether or not there are roads
 
-    def create_plane(self):
+    def create_plane(self, num_of_houses, house_width):
         house1 = hs.House()
         house1.number_of_houses = 3 # testing default, will be changed later thru gui
         house1.build()
         
-        scale = house1.house_width*house1.number_of_houses
+        scale = house_width*num_of_houses
         cmds.polyPlane(n='plane', sx=5, sy=5, w=(scale), h=(scale))
-
-        return house1
 
     #   for every population_scale, add another subdivision/scale the plane larger? 
     #   OR repeat the loop of creating and populating the plane with houses and shift the duplicate to the side
 
-    """def place_house(self):
+    def place_house(self):
         house1 = hs.House()
         house1.number_of_houses = 3
         house1.build()
 
         # this is the only method that currently uses the house instance, so we should use it to send info to the scale method
-        self.scale_plane(house1.number_of_houses, house1.house_width)"""
+        self.create_plane(house1.number_of_houses, house1.house_width)
+
+        return house1
 
     def rotate_house(self):
         # TODO:
@@ -134,7 +134,7 @@ class Grid():
 
         for scale_num in range(self.population_scale):
 
-            house1 = self.create_plane()
+            house1 = self.place_house()
             grid_list.append(house1)
             # rotate if necessary
             # (polish) add roads
