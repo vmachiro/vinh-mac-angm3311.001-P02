@@ -78,9 +78,7 @@ class GridGenWin(QtWidgets.QDialog):
                                     "font: bold 24px;")
         self.name_lbl.setAlignment(Qt.AlignCenter)
         self.main_layout.addWidget(self.name_lbl)
-
-   
-
+ 
     def _mk_btn_layout(self):
         self.btn_layout = QtWidgets.QHBoxLayout()
         self.build_btn = QtWidgets.QPushButton("Build")
@@ -100,8 +98,15 @@ class Grid():
         self.population_scale = 1 # this determines how many houses are on each square/grid
         self.roads = 0 # for now, this just determines whether or not there are roads
 
-    def create_plane(self):
-        cmds.polyPlane(n='plane', sx=5, sy=5)
+    def scale_plane(self):
+        # needs to get the number of houses and their individual width*depth 
+        # so that it can calculate the widest plane and add on some overhang
+        # this needs to use the library which has the parameters 
+        
+        return 
+
+    def create_plane(self, num_of_houses, house_width):
+        cmds.polyPlane(n='plane', sx=5, sy=5, w=house_width, h=house_width)
         # scale it to be big enough to fit all the houses lol
     #   transform the plane to be on level with the houses. or vice versa
     #   for every population_scale, add another subdivision/scale the plane larger? 
@@ -111,6 +116,9 @@ class Grid():
         house1 = hs.House()
         house1.number_of_houses = 3
         house1.build()
+
+        # this is the only method that currently uses the house instance, so we should use it to send info to the scale method
+        self.scale_plane(house1.number_of_houses, house1.house_width)
 
     def rotate_house(self):
         # TODO:
