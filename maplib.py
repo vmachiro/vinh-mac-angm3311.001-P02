@@ -25,10 +25,10 @@ class Grid():
         #   instance a House() object
         house1 = hs.House()
         # set the variables for default testing
+        #   make. the houses based on set default parameters within the class
         house1.number_of_houses = 3
         #   build the houses
         house1.build()
-        #   make. the houses based on set default parameters within the class
 
     def rotate_house(self):
         # TODO:
@@ -50,12 +50,13 @@ class Grid():
         # loop through the population scale in order to make tons of houses using House()
         for scale_num in range(self.population_scale):
             # make houses
+            self.place_house()
             # transform if needed
             # append house thing to list
+            grid_list.append()
             # rotate if necessary
             # (polish) add roads
-        # freeze transforms
-        pass 
+        # freeze transforms 
 
 
 # POLISH:
