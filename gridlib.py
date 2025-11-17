@@ -98,27 +98,23 @@ class Grid():
         self.population_scale = 1 # this determines how many houses are on each square/grid
         self.roads = 0 # for now, this just determines whether or not there are roads
 
-    def scale_plane(self):
-        # needs to get the number of houses and their individual width*depth 
-        # so that it can calculate the widest plane and add on some overhang
-        # this needs to use the library which has the parameters 
-        
-        return 
+    def scale_plane(self, house_width, num_of_houses):
+        return house_width*num_of_houses
 
-    def create_plane(self, num_of_houses, house_width):
-        cmds.polyPlane(n='plane', sx=5, sy=5, w=house_width, h=house_width)
-        # scale it to be big enough to fit all the houses lol
-    #   transform the plane to be on level with the houses. or vice versa
+    def create_plane(self):
+        scale = self.scale_plane()
+        cmds.polyPlane(n='plane', sx=5, sy=5, w=(scale), h=(scale))
+
     #   for every population_scale, add another subdivision/scale the plane larger? 
     #   OR repeat the loop of creating and populating the plane with houses and shift the duplicate to the side
 
-    def place_house(self):
+    """def place_house(self):
         house1 = hs.House()
         house1.number_of_houses = 3
         house1.build()
 
         # this is the only method that currently uses the house instance, so we should use it to send info to the scale method
-        self.scale_plane(house1.number_of_houses, house1.house_width)
+        self.scale_plane(house1.number_of_houses, house1.house_width)"""
 
     def rotate_house(self):
         # TODO:
@@ -133,17 +129,26 @@ class Grid():
         pass
 
     def build(self):
-        self.create_plane()
 
         grid_list= []
 
         for scale_num in range(self.population_scale):
-            self.place_house()
+            house_row = [] # each row should have its own group for organization
+            
+            house1 = hs.House()
+            house1.number_of_houses = 3 # testing default, will be changed later thru gui
+            house1.build()
+
+            house_row.append(house1)
             # transform if needed
 
-            grid_list.append()
+            grid_list.append(house_row)
             # rotate if necessary
             # (polish) add roads
+
+            self.scale_plane(house1.house_width, house1.number_of_houses)
+
+            self.create_plane()
 
         cmds.group(grid_list, name=Grid)
 
