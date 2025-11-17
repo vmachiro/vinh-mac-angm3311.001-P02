@@ -184,8 +184,8 @@ class House():
     def __init__(self):
         self.number_of_houses = 1
         self.number_of_floors = 2        
-        self.wall_height = 8 
-        self.house_width = 8
+        self.wall_height = 5 
+        self.house_width = 5
         self.roof_height = 1 
         self.number_of_windows = 4
         self.number_of_doors = 1
