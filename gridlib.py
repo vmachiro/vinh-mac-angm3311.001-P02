@@ -98,7 +98,7 @@ class Grid():
     def create_plane(self, num_of_houses, house_width):
        
         scale = house_width*num_of_houses
-        cmds.polyPlane(n='plane', sx=5, sy=5, w=(scale), h=(scale))
+        cmds.polyPlane(n='plane', sx=4, sy=4, w=(scale)*3, h=(scale)*2)
 
     #   for every population_scale, add another subdivision/scale the plane larger? 
     #   OR repeat the loop of creating and populating the plane with houses and shift the duplicate to the side
@@ -125,21 +125,20 @@ class Grid():
         #   probably just a straight path for minimalization
         pass
 
+    def transform_row(self, houses):
+        cmds.move( 8, z=True )
+
     def build(self):
 
         grid_list= []
 
         for scale_num in range(self.population_scale):
-
-            house1 = self.place_house()
-            grid_list.append(house1)
+            
+            self.place_house()
+            house1 = cmds.select( all=True )
+            self.transform_row(house1)
             # rotate if necessary
             # (polish) add roads
-
-        cmds.group(grid_list, name="Grid")
-
-        cmds.makeIdentity(grid_list, apply=True, translate=True, rotate=True, 
-                            scale=True, normal=False, preserveNormals=True)
 
 
 # POLISH:
