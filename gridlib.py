@@ -27,10 +27,16 @@ class GridGenWin(QtWidgets.QDialog):
         self.clear_btn.clicked.connect(self.clear)
         self.cancel_btn.clicked.connect(self.cancel)
         self.build_btn.clicked.connect(self.build)
+        self.enable_grp_name_cb.stateChanged.connect(self.toggle_grpname)
+
+    @QtCore.Slot()
+    def toggle_grpname(self):
+        is_custom_grpname_enabled = self.enable_grp_name_cb.isChecked()
+        self.grp_name_ledit.setDisabled(not is_custom_grpname_enabled)
 
     @QtCore.Slot()
     def clear(self):
-        cmds.select(cmds.ls(self.houseGen.housename+"*"))        
+        cmds.select(cmds.ls(self.gridGen.grpname+"*"))        
         cmds.delete()
 
     @QtCore.Slot()
@@ -39,8 +45,12 @@ class GridGenWin(QtWidgets.QDialog):
 
     @QtCore.Slot()
     def build(self):
-        self._update_housegen_properties()
-        self.houseGen.build()
+        self._update_grid_properties()
+        self.gridGen.build()
+    
+    def _update_grid_properties(self):
+        self.gridGen.__init__() # reset properties to default
+        self.gridGen.grpname = self.grp_name_ledit.text()
 
     def _mk_main_layout(self):
         self.main_layout = QtWidgets.QVBoxLayout()
@@ -48,6 +58,18 @@ class GridGenWin(QtWidgets.QDialog):
         self._add_form_layout()
         self._mk_btn_layout()
         self.setLayout(self.main_layout)
+
+    def _add_form_layout(self):
+        self.form_layout = QtWidgets.QFormLayout()
+        self._add_custom_grpname()
+        self.main_layout.addLayout(self.form_layout)    
+
+    def _add_custom_grpname(self):
+        self.enable_grp_name_cb = QtWidgets.QCheckBox("Enable Custom Grid Name")
+        self.grp_name_ledit = QtWidgets.QLineEdit("Grid")
+        self.grp_name_ledit.setDisabled(True)
+        self.form_layout.addRow(self.enable_grp_name_cb)
+        self.form_layout.addRow("Group", self.grp_name_ledit)
 
     def _add_name_label(self):
         self.name_lbl = QtWidgets.QLabel("Grid Generator")
@@ -57,10 +79,7 @@ class GridGenWin(QtWidgets.QDialog):
         self.name_lbl.setAlignment(Qt.AlignCenter)
         self.main_layout.addWidget(self.name_lbl)
 
-    def _add_form_layout(self):
-        self.form_layout = QtWidgets.QFormLayout()
-        
-        self.main_layout.addLayout(self.form_layout)
+   
 
     def _mk_btn_layout(self):
         self.btn_layout = QtWidgets.QHBoxLayout()
@@ -73,18 +92,17 @@ class GridGenWin(QtWidgets.QDialog):
         self.main_layout.addLayout(self.btn_layout)
 
 
-
-
 class Grid():
     def __init__(self):
         # input most basic parameters to build the grid of houses
         # population of houses since we already have number of houses? roads
-        
+        self.grpname = "Grid"
         self.population_scale = 1 # this determines how many houses are on each square/grid
         self.roads = 0 # for now, this just determines whether or not there are roads
 
     def create_plane(self):
-        cmds.plane( p=(1, 1, 1), s=10 )
+        cmds.polyPlane(n='plane', sx=5, sy=5)
+        # scale it to be big enough to fit all the houses lol
     #   transform the plane to be on level with the houses. or vice versa
     #   for every population_scale, add another subdivision/scale the plane larger? 
     #   OR repeat the loop of creating and populating the plane with houses and shift the duplicate to the side
