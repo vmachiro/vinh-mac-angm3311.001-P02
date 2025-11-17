@@ -12,10 +12,8 @@ def get_maya_main_win():
     main_win = omui.MQtUtil.mainWindow()
     return wrapInstance(int(main_win), QtWidgets.QWidget)
 
-# build a second GUI to be utilized that focuses on the map parameters rather than the house parameters.
 class GridGenWin(QtWidgets.QDialog):
     def __init__(self):
-        # runs the init code of the parent QDialog class
         super().__init__(parent=get_maya_main_win())
         self.gridGen = Grid()
         self.setWindowTitle("Grid Generator")
@@ -92,18 +90,20 @@ class GridGenWin(QtWidgets.QDialog):
 
 class Grid():
     def __init__(self):
-        # input most basic parameters to build the grid of houses
-        # population of houses since we already have number of houses? roads
+        
         self.grpname = "Grid"
         self.population_scale = 1 # this determines how many houses are on each square/grid
         self.roads = 0 # for now, this just determines whether or not there are roads
 
-    def scale_plane(self, house_width, num_of_houses):
-        return house_width*num_of_houses
-
     def create_plane(self):
-        scale = self.scale_plane()
+        house1 = hs.House()
+        house1.number_of_houses = 3 # testing default, will be changed later thru gui
+        house1.build()
+        
+        scale = house1.house_width*house1.number_of_houses
         cmds.polyPlane(n='plane', sx=5, sy=5, w=(scale), h=(scale))
+
+        return house1
 
     #   for every population_scale, add another subdivision/scale the plane larger? 
     #   OR repeat the loop of creating and populating the plane with houses and shift the duplicate to the side
@@ -133,24 +133,13 @@ class Grid():
         grid_list= []
 
         for scale_num in range(self.population_scale):
-            house_row = [] # each row should have its own group for organization
-            
-            house1 = hs.House()
-            house1.number_of_houses = 3 # testing default, will be changed later thru gui
-            house1.build()
 
-            house_row.append(house1)
-            # transform if needed
-
-            grid_list.append(house_row)
+            house1 = self.create_plane()
+            grid_list.append(house1)
             # rotate if necessary
             # (polish) add roads
 
-            self.scale_plane(house1.house_width, house1.number_of_houses)
-
-            self.create_plane()
-
-        cmds.group(grid_list, name=Grid)
+        cmds.group(grid_list, name="Grid")
 
         cmds.makeIdentity(grid_list, apply=True, translate=True, rotate=True, 
                             scale=True, normal=False, preserveNormals=True)
