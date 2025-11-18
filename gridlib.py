@@ -92,7 +92,7 @@ class Grid():
     def __init__(self):
         
         self.grpname = "Grid"
-        self.population_scale = 1 # this determines how many houses are on each square/grid
+        self.population_scale = 2 # this determines how many houses are on each square/grid
         self.roads = 0 # for now, this just determines whether or not there are roads
 
     def create_plane(self, num_of_houses, house_width):
@@ -108,11 +108,8 @@ class Grid():
         house1.number_of_houses = 3
         house1.build()
 
-        # this is the only method that currently uses the house instance, so we should use it to send info to the scale method
         self.create_plane(house1.number_of_houses, house1.house_width)
-
-        return house1
-
+        
     def rotate_house(self):
         # TODO:
         # define a method that flips the groups of houses to face different directions
@@ -125,7 +122,7 @@ class Grid():
         #   probably just a straight path for minimalization
         pass
 
-    def transform_row(self, houses):
+    def transform_row(self):
         cmds.move( 8, z=True )
 
     def build(self):
@@ -136,7 +133,15 @@ class Grid():
             
             self.place_house()
             house1 = cmds.select( all=True )
-            self.transform_row(house1)
+            cmds.group( n='row1' )
+
+            self.transform_row()
+            cmds.makeIdentity('row1', apply=True, translate=True, rotate=True, 
+                            scale=True, normal=False, preserveNormals=True)
+            
+            cmds.select( clear=True )
+
+            
             # rotate if necessary
             # (polish) add roads
 
