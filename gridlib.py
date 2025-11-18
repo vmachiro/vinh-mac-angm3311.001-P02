@@ -91,7 +91,7 @@ class GridGenWin(QtWidgets.QDialog):
 class Grid():
     def __init__(self):
         
-        self.grpname = "Grid"
+        self.grpname = "grid"
         self.population_scale = 2 # this determines how many houses are on each square/grid
         self.roads = 0 # for now, this just determines whether or not there are roads
 
@@ -105,7 +105,7 @@ class Grid():
 
     def place_house(self):
         house1 = hs.House()
-        house1.number_of_houses = 3
+        house1.number_of_houses = 4
         house1.build()
 
         self.create_plane(house1.number_of_houses, house1.house_width)
@@ -122,29 +122,27 @@ class Grid():
         #   probably just a straight path for minimalization
         pass
 
-    def transform_row(self):
+    def transform_row(self, row):
         cmds.move( 8, z=True )
+        cmds.makeIdentity(row, apply=True, translate=True, rotate=True, 
+                            scale=True, normal=False, preserveNormals=True)
 
     def build(self):
 
-        grid_list= []
+        self.place_house()
+        cmds.select( all=True )
+        cmds.group( n='row' )
 
-        for scale_num in range(self.population_scale):
+        for scale_num in range(self.population_scale-1):
+            cmds.duplicate( 'row', st=True )
+            self.transform_row('row')
             
-            self.place_house()
-            house1 = cmds.select( all=True )
-            cmds.group( n='row1' )
-
-            self.transform_row()
-            cmds.makeIdentity('row1', apply=True, translate=True, rotate=True, 
-                            scale=True, normal=False, preserveNormals=True)
-            
-            cmds.select( clear=True )
-
             
             # rotate if necessary
-            # (polish) add roads
+        cmds.select( all=True )
+        cmds.group( n=self.grpname )
 
+        
 
 # POLISH:
 # figure out house randomization
