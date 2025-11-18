@@ -108,6 +108,7 @@ class Grid():
         house1.number_of_houses = 4
         house1.build()
 
+
         self.create_plane(house1.number_of_houses, house1.house_width)
         
     def rotate_house(self):
@@ -123,7 +124,7 @@ class Grid():
         pass
 
     def transform_row(self, row):
-        cmds.move( 8, z=True )
+        cmds.move( 10, z=True )
         cmds.makeIdentity(row, apply=True, translate=True, rotate=True, 
                             scale=True, normal=False, preserveNormals=True)
 
@@ -136,8 +137,7 @@ class Grid():
         for scale_num in range(self.population_scale-1):
             cmds.duplicate( 'row', st=True )
             self.transform_row('row')
-            
-            
+                       
             # rotate if necessary
         cmds.select( all=True )
         cmds.group( n=self.grpname )
