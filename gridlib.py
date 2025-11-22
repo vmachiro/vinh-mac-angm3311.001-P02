@@ -48,7 +48,7 @@ class GridGenWin(QtWidgets.QDialog):
     
     def _update_grid_properties(self):
         self.gridGen.__init__() # reset properties to default
-        self.gridGen.population_scale = self.population_scale_spnbox.value()
+        self.gridGen.number_of_rows = self.number_of_rows_spnbox.value()
         self.gridGen.number_of_houses = self.number_of_houses_spnbox.value()
         self.gridGen.grpname = self.grp_name_ledit.text()
 
@@ -67,9 +67,9 @@ class GridGenWin(QtWidgets.QDialog):
         self.main_layout.addLayout(self.form_layout)    
     
     def _scale_pop(self):
-        self.population_scale_spnbox = QtWidgets.QSpinBox()
-        self.population_scale_spnbox.setValue(2)
-        self.form_layout.addRow("Number of Rows", self.population_scale_spnbox)
+        self.number_of_rows_spnbox = QtWidgets.QSpinBox()
+        self.number_of_rows_spnbox.setValue(2)
+        self.form_layout.addRow("Number of Rows", self.number_of_rows_spnbox)
 
     def _add_houses(self):
         self.number_of_houses_spnbox = QtWidgets.QSpinBox()
@@ -108,7 +108,7 @@ class Grid():
     def __init__(self):
         
         self.grpname = "grid"
-        self.population_scale = 3
+        self.number_of_rows = 3
         self.number_of_houses = 1
         self.roads = 0 # for now, this just determines whether or not there are roads
 
@@ -117,7 +117,7 @@ class Grid():
         cmds.polyPlane(n='plane', sx=4, sy=3, w=(scale)*2, h=(scale)*2)
 
 
-    #   for every population_scale, add another subdivision/scale the plane larger? 
+    #   for every number_of_rows, add another subdivision/scale the plane larger? 
     #   OR repeat the loop of creating and populating the plane with houses and shift the duplicate to the side
 
     def place_house(self):
@@ -147,7 +147,7 @@ class Grid():
         cmds.group( n='row' )
         cmds.select( clear=True )
 
-        for scale_num in range(self.population_scale-1):
+        for scale_num in range(self.number_of_rows-1):
             cmds.duplicate( 'row', st=True )
 
             cmds.select( all=True )
