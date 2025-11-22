@@ -92,7 +92,7 @@ class Grid():
     def __init__(self):
         
         self.grpname = "grid"
-        self.population_scale = 2 # this determines how many houses are on each square/grid
+        self.population_scale = 3 # this determines how many houses are on each square/grid
         self.roads = 0 # for now, this just determines whether or not there are roads
 
     def create_plane(self, num_of_houses, house_width):
@@ -107,15 +107,17 @@ class Grid():
         house1 = hs.House()
         house1.number_of_houses = 4
         house1.build()
-
-
         self.create_plane(house1.number_of_houses, house1.house_width)
         
-    def rotate_house(self):
-        # TODO:
-        # define a method that flips the groups of houses to face different directions
-        #   can probably reuse the window rotation code
-        pass
+    def rotate_house(self, house_x_pos):
+        x_pos = house_x_pos*-1
+
+        cmds.move( x_pos, x=True )
+
+    def transform_window_to_back(self, window_z_pos):
+        z_pos = window_z_pos*-1
+
+        cmds.move( z_pos, z=True )
 
     def make_road(self):
         # TODO:
@@ -136,9 +138,13 @@ class Grid():
 
         for scale_num in range(self.population_scale-1):
             cmds.duplicate( 'row', st=True )
-            self.transform_row('row')
+            cmds.select( all=True )
+            world_pos = cmds.xform('row', query=True, worldSpace=True, translation=True)
                        
-            # rotate if necessary
+            if scale_num%2 != 0:
+                self.rotate_house(world_pos[0])
+            self.transform_row('row')
+
         cmds.select( all=True )
         cmds.group( n=self.grpname )
 
