@@ -48,6 +48,8 @@ class GridGenWin(QtWidgets.QDialog):
     
     def _update_grid_properties(self):
         self.gridGen.__init__() # reset properties to default
+        self.gridGen.population_scale = self.population_scale_spnbox.value()
+        self.gridGen.number_of_houses = self.number_of_houses_spnbox.value()
         self.gridGen.grpname = self.grp_name_ledit.text()
 
     def _mk_main_layout(self):
@@ -59,8 +61,20 @@ class GridGenWin(QtWidgets.QDialog):
 
     def _add_form_layout(self):
         self.form_layout = QtWidgets.QFormLayout()
+        self._scale_pop()
+        self._add_houses()
         self._add_custom_grpname()
         self.main_layout.addLayout(self.form_layout)    
+    
+    def _scale_pop(self):
+        self.population_scale_spnbox = QtWidgets.QSpinBox()
+        self.population_scale_spnbox.setValue(2)
+        self.form_layout.addRow("Number of Rows", self.population_scale_spnbox)
+
+    def _add_houses(self):
+        self.number_of_houses_spnbox = QtWidgets.QSpinBox()
+        self.number_of_houses_spnbox.setValue(1)
+        self.form_layout.addRow("Number of Houses", self.number_of_houses_spnbox)
 
     def _add_custom_grpname(self):
         self.enable_grp_name_cb = QtWidgets.QCheckBox("Enable Custom Grid Name")
@@ -92,7 +106,8 @@ class Grid():
     def __init__(self):
         
         self.grpname = "grid"
-        self.population_scale = 3 # this determines how many houses are on each square/grid
+        self.population_scale = 3
+        self.number_of_houses = 1
         self.roads = 0 # for now, this just determines whether or not there are roads
 
     def create_plane(self, num_of_houses, house_width):
@@ -105,18 +120,16 @@ class Grid():
 
     def place_house(self):
         house1 = hs.House()
-        house1.number_of_houses = 4
+        house1.number_of_houses = self.number_of_houses
         house1.build()
         self.create_plane(house1.number_of_houses, house1.house_width)
         
     def rotate_house(self, house_x_pos):
         x_pos = house_x_pos*-1
-
         cmds.move( x_pos, x=True )
 
     def transform_window_to_back(self, window_z_pos):
         z_pos = window_z_pos*-1
-
         cmds.move( z_pos, z=True )
 
     def make_road(self):
@@ -136,7 +149,7 @@ class Grid():
         cmds.select( all=True )
         cmds.group( n='row' )
 
-        for scale_num in range(self.population_scale-1):
+        for scale_num in range(self.population_scale):
             cmds.duplicate( 'row', st=True )
             cmds.select( all=True )
             world_pos = cmds.xform('row', query=True, worldSpace=True, translation=True)
