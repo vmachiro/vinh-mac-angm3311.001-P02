@@ -144,7 +144,6 @@ class Grid():
                             scale=True, normal=False, preserveNormals=True)
 
     def build(self):
-
         self.place_house()
         cmds.select( all=True )
         cmds.group( n='row' )
