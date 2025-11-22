@@ -44,7 +44,7 @@ class GridGenWin(QtWidgets.QDialog):
     @QtCore.Slot()
     def build(self):
         self._update_grid_properties()
-        self.gridGen.build()
+        self.gridGen.build_grid()
     
     def _update_grid_properties(self):
         self.gridGen.__init__() # reset properties to default
@@ -74,6 +74,8 @@ class GridGenWin(QtWidgets.QDialog):
     def _add_houses(self):
         self.number_of_houses_spnbox = QtWidgets.QSpinBox()
         self.number_of_houses_spnbox.setValue(1)
+        self.number_of_houses_spnbox.setMinimum(1)
+        self.number_of_houses_spnbox.setMaximum(8)
         self.form_layout.addRow("Number of Houses", self.number_of_houses_spnbox)
 
     def _add_custom_grpname(self):
@@ -124,9 +126,9 @@ class Grid():
         house1.build()
         # self.create_plane(house1.number_of_houses, house1.house_width)
         
-    def rotate_house(self, house_x_pos):
-        x_pos = (house_x_pos*-1)-10
-        cmds.move( x_pos, x=True )
+    def rotate_house(self, house_z_pos):
+        z_pos = house_z_pos-10
+        cmds.move( z_pos, z=True )
 
     def make_road(self):
         # TODO:
@@ -135,23 +137,27 @@ class Grid():
         pass
 
     def transform_row(self, row):
-        cmds.move( 10, z=True )
+        cmds.move( 5, z=True )
         cmds.makeIdentity(row, apply=True, translate=True, rotate=True, 
                             scale=True, normal=False, preserveNormals=True)
 
-    def build(self):
+    def build_grid(self):
         self.place_house()
         cmds.select( all=True )
         cmds.group( n='row' )
+        cmds.select( clear=True )
 
-        for scale_num in range(self.population_scale):
+        for scale_num in range(self.population_scale-1):
             cmds.duplicate( 'row', st=True )
+
             cmds.select( all=True )
-            world_pos = cmds.xform('row', query=True, worldSpace=True, translation=True)
-                       
-            if scale_num%2 != 0:
-                self.rotate_house(world_pos[2])
+            world_pos = cmds.xform('row', query=True, worldSpace=True, translation=True)      
             self.transform_row('row')
+
+            if scale_num%2 != 0:
+                cmds.select( all=True )
+                world_pos = cmds.xform('row', query=True, worldSpace=True, translation=True)
+                self.rotate_house(world_pos[2])
 
         cmds.select( all=True )
         cmds.group( n=self.grpname )
