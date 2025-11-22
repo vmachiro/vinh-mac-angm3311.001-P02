@@ -111,9 +111,9 @@ class Grid():
         self.roads = 0 # for now, this just determines whether or not there are roads
 
     def create_plane(self, num_of_houses, house_width):
-       
         scale = house_width*num_of_houses
-        cmds.polyPlane(n='plane', sx=4, sy=4, w=(scale)*3, h=(scale)*2)
+        cmds.polyPlane(n='plane', sx=4, sy=3, w=(scale)*2, h=(scale)*2)
+
 
     #   for every population_scale, add another subdivision/scale the plane larger? 
     #   OR repeat the loop of creating and populating the plane with houses and shift the duplicate to the side
@@ -122,15 +122,11 @@ class Grid():
         house1 = hs.House()
         house1.number_of_houses = self.number_of_houses
         house1.build()
-        self.create_plane(house1.number_of_houses, house1.house_width)
+        # self.create_plane(house1.number_of_houses, house1.house_width)
         
     def rotate_house(self, house_x_pos):
-        x_pos = house_x_pos*-1
+        x_pos = (house_x_pos*-1)-10
         cmds.move( x_pos, x=True )
-
-    def transform_window_to_back(self, window_z_pos):
-        z_pos = window_z_pos*-1
-        cmds.move( z_pos, z=True )
 
     def make_road(self):
         # TODO:
@@ -154,7 +150,7 @@ class Grid():
             world_pos = cmds.xform('row', query=True, worldSpace=True, translation=True)
                        
             if scale_num%2 != 0:
-                self.rotate_house(world_pos[0])
+                self.rotate_house(world_pos[2])
             self.transform_row('row')
 
         cmds.select( all=True )
