@@ -124,10 +124,9 @@ class Grid():
         house1 = hs.House()
         house1.number_of_houses = self.number_of_houses
         house1.build()
-        # self.create_plane(house1.number_of_houses, house1.house_width)
         
     def rotate_house(self, house_z_pos):
-        z_pos = house_z_pos-10
+        z_pos = house_z_pos*-1
         cmds.move( z_pos, z=True )
 
     def make_road(self):
@@ -136,28 +135,32 @@ class Grid():
         #   probably just a straight path for minimalization
         pass
 
-    def transform_row(self, row):
-        cmds.move( 5, z=True )
-        cmds.makeIdentity(row, apply=True, translate=True, rotate=True, 
-                            scale=True, normal=False, preserveNormals=True)
+    def transform_row(self):
+        cmds.move( 10, z=True )
+
 
     def build_grid(self):
         self.place_house()
         cmds.select( all=True )
         cmds.group( n='row' )
-        cmds.select( clear=True )
 
         for scale_num in range(self.number_of_rows-1):
-            cmds.duplicate( 'row', st=True )
-
+            current = cmds.duplicate( 'row', st=True )
+           
+            self.transform_row()
             cmds.select( all=True )
-            world_pos = cmds.xform('row', query=True, worldSpace=True, translation=True)      
-            self.transform_row('row')
+            world_pos = cmds.xform('row'+str(scale_num+1), query=True, worldSpace=True, translation=True)      
+            print("this is the world position of the group row: " + str(world_pos))
+            cmds.makeIdentity(current, apply=True, translate=True, rotate=True, 
+                            scale=True, normal=False, preserveNormals=True)
 
             if scale_num%2 != 0:
                 cmds.select( all=True )
                 world_pos = cmds.xform('row', query=True, worldSpace=True, translation=True)
                 self.rotate_house(world_pos[2])
+
+        # self.create_plane(house1.number_of_houses, house1.house_width)
+        # make plane that scales according to number of houses and number of rows
 
         cmds.select( all=True )
         cmds.group( n=self.grpname )
