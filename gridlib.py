@@ -110,11 +110,6 @@ class Grid():
         self.grpname = "grid"
         self.number_of_rows = 3
         self.number_of_houses = 1
-        self.roads = 0 # for now, this just determines whether or not there are roads
-
-    def create_plane(self, num_of_houses, house_width):
-        scale = house_width*num_of_houses
-        cmds.polyPlane(n='plane', sx=4, sy=3, w=(scale)*2, h=(scale)*2)
 
     #   for every number_of_rows, add another subdivision/scale the plane larger? 
     #   OR repeat the loop of creating and populating the plane with houses and shift the duplicate to the side
@@ -128,15 +123,8 @@ class Grid():
         z_pos = house_z_pos*-1
         cmds.move( z_pos, z=True )
 
-    def make_road(self):
-        # TODO:
-        # (LAST) define a method that puts a road on the map around the houses. 
-        #   probably just a straight path for minimalization
-        pass
-
     def transform_row(self):
         cmds.move( 10, z=True )
-
 
     def build_grid(self):
         self.place_house()
@@ -149,22 +137,15 @@ class Grid():
             cmds.select( all=True )
             cmds.makeIdentity('row', apply=True, translate=True, rotate=True, 
                             scale=True, normal=False, preserveNormals=True)
-            if scale_num%2 != 0:
+            """if scale_num%2 != 0:
                 cmds.select( all=True )
                 world_pos = cmds.xform('row', query=True, worldSpace=True, translation=True)
-                self.rotate_house(world_pos[2])
+                self.rotate_house(world_pos[2])"""
         cmds.select( all=True )
         cmds.group( n=self.grpname )
-        # self.create_plane(house1.number_of_houses, house1.house_width)
-        # make plane that scales according to number of houses and number of rows
-
-        
-
-        
 
 # POLISH:
 # figure out house randomization
-# user customizability of the houses comes after roads 
 # GUI should call the house generator at some point with a button, so that the user can fine tune how the houses look
 
 if __name__ == "__main__":
