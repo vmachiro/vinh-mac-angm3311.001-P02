@@ -128,8 +128,15 @@ class Grid():
         z_pos = house_z_pos*-1
         cmds.move( z_pos, z=True )
 
+    def make_road(self):
+        # TODO:
+        # (LAST) define a method that puts a road on the map around the houses. 
+        #   probably just a straight path for minimalization
+        pass
+
     def transform_row(self):
         cmds.move( 10, z=True )
+
 
     def build_grid(self):
         self.place_house()
@@ -137,25 +144,21 @@ class Grid():
         cmds.group( n='row' )
 
         for scale_num in range(self.number_of_rows-1):
-            current = cmds.duplicate( 'row', st=True )
-           
+            cmds.duplicate( st=True )
             self.transform_row()
             cmds.select( all=True )
-            world_pos = cmds.xform('row'+str(scale_num+1), query=True, worldSpace=True, translation=True)      
-            print("this is the world position of the group row: " + str(world_pos))
-            cmds.makeIdentity(current, apply=True, translate=True, rotate=True, 
+            cmds.makeIdentity('row', apply=True, translate=True, rotate=True, 
                             scale=True, normal=False, preserveNormals=True)
-
             if scale_num%2 != 0:
                 cmds.select( all=True )
                 world_pos = cmds.xform('row', query=True, worldSpace=True, translation=True)
                 self.rotate_house(world_pos[2])
-
+        cmds.select( all=True )
+        cmds.group( n=self.grpname )
         # self.create_plane(house1.number_of_houses, house1.house_width)
         # make plane that scales according to number of houses and number of rows
 
-        cmds.select( all=True )
-        cmds.group( n=self.grpname )
+        
 
         
 
