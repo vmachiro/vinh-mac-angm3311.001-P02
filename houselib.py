@@ -301,6 +301,11 @@ class House():
 
         return xform
     
+    def create_plane(self, num_of_houses, house_width):
+        scale = house_width*num_of_houses
+        cmds.polyPlane(n='plane', sx=3, sy=3, w=(scale)*2, h=(scale)*2)
+
+
     def transform_door(self, door):
         z_pos = self.get_center_of_wall()
         y_pos = self.get_base_of_house()*.7
@@ -326,7 +331,6 @@ class House():
 
         for house_num in range(self.number_of_houses):
             house_name = self.housename+str(house_num) 
-
             housebody = self.mkhousebody()
             house_things.append(housebody)
 
@@ -342,9 +346,8 @@ class House():
             
             windows_grp = self.mkwindows()
             cmds.group(windows_grp, name="windows_GRP", parent=house_name)
-            
+
             world_pos = cmds.xform(house_name, query=True, worldSpace=True, translation=True)
-      
             self.transform_house(world_pos[0],house_num,house_name)
             
             cmds.makeIdentity(house_name, apply=True, translate=True, rotate=True, 
