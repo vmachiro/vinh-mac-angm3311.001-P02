@@ -131,7 +131,6 @@ class Grid():
     def transform_row(self):
         cmds.move( 10, z=True )
 
-
     def build_grid(self):
         self.place_house()
         cmds.select( all=True )
