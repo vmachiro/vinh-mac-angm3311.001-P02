@@ -116,7 +116,6 @@ class Grid():
         scale = house_width*num_of_houses
         cmds.polyPlane(n='plane', sx=4, sy=3, w=(scale)*2, h=(scale)*2)
 
-
     #   for every number_of_rows, add another subdivision/scale the plane larger? 
     #   OR repeat the loop of creating and populating the plane with houses and shift the duplicate to the side
 
@@ -128,12 +127,6 @@ class Grid():
     def rotate_house(self, house_z_pos):
         z_pos = house_z_pos*-1
         cmds.move( z_pos, z=True )
-
-    def make_road(self):
-        # TODO:
-        # (LAST) define a method that puts a road on the map around the houses. 
-        #   probably just a straight path for minimalization
-        pass
 
     def transform_row(self):
         cmds.move( 10, z=True )
