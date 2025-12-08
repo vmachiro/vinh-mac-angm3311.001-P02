@@ -110,7 +110,7 @@ class Grid():
         self.number_of_houses = 1
 
     def clear_grid(self):
-        cmds.select(cmds.ls(self.gridGen.grpname+"*"))        
+        cmds.select(cmds.ls(self.grpname+"*"))        
         cmds.delete()
 
     def place_house(self):

@@ -190,7 +190,7 @@ class House():
         self.housename = "House"
     
     def clear_houses(self):
-        cmds.select(cmds.ls(self.houseGen.housename+"*"))        
+        cmds.select(cmds.ls(self.housename+"*"))        
         cmds.delete()
 
     def get_height_of_house(self):
