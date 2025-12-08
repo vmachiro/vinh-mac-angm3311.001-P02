@@ -134,13 +134,9 @@ class Grid():
         for scale_num in range(self.number_of_rows-1):
             cmds.duplicate( st=True )
             self.transform_row()
-            cmds.select( all=True )
             cmds.makeIdentity('row', apply=True, translate=True, rotate=True, 
                             scale=True, normal=False, preserveNormals=True)
-            """if scale_num%2 != 0:
-                cmds.select( all=True )
-                world_pos = cmds.xform('row', query=True, worldSpace=True, translation=True)
-                self.rotate_house(world_pos[2])"""
+         
         cmds.select( all=True )
         cmds.group( n=self.grpname )
 
