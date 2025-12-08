@@ -213,7 +213,6 @@ class House():
                                     width = self.house_width,
                                     depth = self.house_width,
                                     name = "housebody")
-        
         cmds.xform(xform, translation = [0,self.get_height_of_house()/2,0])          
         
         return xform
@@ -236,14 +235,12 @@ class House():
                         cmds.xform( r=True, ro=(0,90,0) )
                         x_pos = world_pos[2] 
                         cmds.move( x_pos, x=True )
-
                         z_pos = world_pos[0]
                         cmds.move( z_pos, z=True )
 
                         if windows_num%2 == 1:
                             cmds.move( x_pos*-1, x=True )
                             cmds.move( z_pos*-1, z=True )
-                    
                     world_pos = cmds.xform(xform, query=True, worldSpace=True, translation=True)
 
                 if windows_num%2 == 1:
@@ -265,12 +262,10 @@ class House():
         z_pos = self.get_center_of_wall()
         y_pos = self.get_window_height_from_base()
         pos = [0, y_pos, z_pos]
-
         cmds.xform(window, translation=pos)
 
     def transform_window_to_back(self, window_z_pos):
         z_pos = window_z_pos*-1
-
         cmds.move( z_pos, z=True )
 
     def mkdoors(self):
@@ -303,42 +298,43 @@ class House():
     
     def create_plane(self, num_of_houses, house_width):
         scale = house_width*num_of_houses
-        cmds.polyPlane(n='plane', sx=3, sy=3, w=(scale)*2, h=(scale)*2)
+        xform, shape = cmds.polyPlane(sx=3,
+                                    sy=3,
+                                    w=(scale)*2,
+                                    h=(scale)*2,
+                                    name = "plane")
+        return xform
 
     def transform_door(self, door):
         z_pos = self.get_center_of_wall()
         y_pos = self.get_base_of_house()*.7
         pos = [0, y_pos, z_pos]
-
         cmds.xform(door, translation=pos)
 
     def transform_door_to_back(self, door):
         z_pos = self.get_center_of_wall()
         y_pos = self.get_base_of_house()
         pos = [0, y_pos, z_pos*-1]
-
         cmds.xform(door, translation=pos)
 
     def transform_house(self, house_x_pos, house_num, housename):
         x_pos = house_x_pos + self.house_width*house_num*1.5
-
         cmds.move( x_pos, housename, x=True )
 
     def build(self):
-
         house_things = []
 
         for house_num in range(self.number_of_houses):
             house_name = self.housename+str(house_num) 
             housebody = self.mkhousebody()
             house_things.append(housebody)
+            plane = self.create_plane(self.number_of_houses,self.house_width)
+            house_things.append(plane)
             if self.roof_height != 0:
                 houseroof = self.mkhouseflatroof()
                 house_things.append(houseroof)
-            plane = self.create_plane(self.number_of_houses,self.house_width)
-            house_things.append(plane)
+            
             cmds.group(house_things, name=house_name)
-            house_things.clear()
 
             doors_grp = self.mkdoors()
             cmds.group(doors_grp, name="doors_GRP", parent=house_name)
@@ -348,6 +344,7 @@ class House():
 
             world_pos = cmds.xform(house_name, query=True, worldSpace=True, translation=True)
             self.transform_house(world_pos[0],house_num,house_name)
+            house_things.clear()
             cmds.makeIdentity(house_name, apply=True, translate=True, rotate=True, 
                             scale=True, normal=False, preserveNormals=True)
             
