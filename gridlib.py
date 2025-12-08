@@ -116,9 +116,7 @@ class Grid():
     def place_house(self):
         house1 = hs.House()
         house1.number_of_houses = self.number_of_houses
-        houses = []
-        houses.append(house1.build())
-        return houses
+        house1.build()
         
     def rotate_house(self, house_z_pos):
         z_pos = house_z_pos*-1
