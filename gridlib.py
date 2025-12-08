@@ -47,7 +47,7 @@ class GridGenWin(QtWidgets.QDialog):
         self.gridGen.build_grid()
     
     def _update_grid_properties(self):
-        self.gridGen.__init__() # reset properties to default
+        self.gridGen.__init__()
         self.gridGen.number_of_rows = self.number_of_rows_spnbox.value()
         self.gridGen.number_of_houses = self.number_of_houses_spnbox.value()
         self.gridGen.grpname = self.grp_name_ledit.text()
@@ -61,12 +61,12 @@ class GridGenWin(QtWidgets.QDialog):
 
     def _add_form_layout(self):
         self.form_layout = QtWidgets.QFormLayout()
-        self._scale_pop()
+        self._scale_number_of_rows()
         self._add_houses()
         self._add_custom_grpname()
         self.main_layout.addLayout(self.form_layout)    
     
-    def _scale_pop(self):
+    def _scale_number_of_rows(self):
         self.number_of_rows_spnbox = QtWidgets.QSpinBox()
         self.number_of_rows_spnbox.setValue(2)
         self.form_layout.addRow("Number of Rows", self.number_of_rows_spnbox)
@@ -103,16 +103,14 @@ class GridGenWin(QtWidgets.QDialog):
         self.btn_layout.addWidget(self.cancel_btn)
         self.main_layout.addLayout(self.btn_layout)
 
+    
+
 
 class Grid():
     def __init__(self):
-        
         self.grpname = "grid"
         self.number_of_rows = 3
         self.number_of_houses = 1
-
-    #   for every number_of_rows, add another subdivision/scale the plane larger? 
-    #   OR repeat the loop of creating and populating the plane with houses and shift the duplicate to the side
 
     def place_house(self):
         house1 = hs.House()
@@ -134,11 +132,12 @@ class Grid():
         for scale_num in range(self.number_of_rows-1):
             cmds.duplicate( st=True )
             self.transform_row()
-            cmds.makeIdentity('row', apply=True, translate=True, rotate=True, 
-                            scale=True, normal=False, preserveNormals=True)
+            cmds.select(all=True)
          
         cmds.select( all=True )
         cmds.group( n=self.grpname )
+        cmds.makeIdentity(self.grpname, apply=True, translate=True, rotate=True, 
+                            scale=True, normal=False, preserveNormals=True)
 
 # POLISH:
 # figure out house randomization
