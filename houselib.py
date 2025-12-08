@@ -322,8 +322,10 @@ class House():
             house_name = self.housename+str(house_num) 
             housebody = self.mkhousebody()
             house_things.append(housebody)
+            
             plane = self.create_plane(self.number_of_houses,self.house_width)
             house_things.append(plane)
+            
             if self.roof_height != 0:
                 houseroof = self.mkhouseflatroof()
                 house_things.append(houseroof)
