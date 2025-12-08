@@ -333,7 +333,6 @@ class House():
             if self.roof_height != 0:
                 houseroof = self.mkhouseflatroof()
                 house_things.append(houseroof)
-            
             cmds.group(house_things, name=house_name)
 
             doors_grp = self.mkdoors()
