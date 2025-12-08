@@ -34,8 +34,7 @@ class GridGenWin(QtWidgets.QDialog):
 
     @QtCore.Slot()
     def clear(self):
-        cmds.select(cmds.ls(self.gridGen.grpname+"*"))        
-        cmds.delete()
+        self.gridGen.clear_grid()
 
     @QtCore.Slot()
     def cancel(self):
@@ -110,32 +109,35 @@ class Grid():
         self.number_of_rows = 3
         self.number_of_houses = 1
 
+    def clear_grid(self):
+        cmds.select(cmds.ls(self.gridGen.grpname+"*"))        
+        cmds.delete()
+
     def place_house(self):
         house1 = hs.House()
         house1.number_of_houses = self.number_of_houses
-        house1.build()
+        return house1.build()
         
     def rotate_house(self, house_z_pos):
         z_pos = house_z_pos*-1
         cmds.move( z_pos, z=True )
 
-    def transform_row(self):
-        cmds.move( 10, z=True )
+    def transform_row(self, current_row):
+        cmds.move( current_row, 10, z=True )
 
     def build_grid(self):
-        self.place_house()
-        cmds.select( all=True )
-        cmds.group( n='row' )
-        cmds.makeIdentity('row', apply=True, translate=True, rotate=True, 
-                            scale=True, normal=False, preserveNormals=True)        
+        grid_list = []
+        row = self.place_house()
+        cmds.group( row, n='row' )
+        grid_list.append(row)
 
         for scale_num in range(self.number_of_rows-1):
-            cmds.duplicate('row')
-            cmds.select('row')
-            self.transform_row()
+            current_row = cmds.duplicate("Grid|row")[0]
+            self.transform_row(current_row)
+            grid_list.append(current_row)
+
         
-        cmds.select( all=True )
-        cmds.group( n=self.grpname )
+        cmds.group( grid_list, n=self.grpname )
         cmds.makeIdentity(self.grpname, apply=True, translate=True, rotate=True, 
                             scale=True, normal=False, preserveNormals=True)
         
