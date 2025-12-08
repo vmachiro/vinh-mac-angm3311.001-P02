@@ -57,8 +57,7 @@ class HouseGenWin(QtWidgets.QDialog):
 
     @QtCore.Slot()
     def clear(self):
-        cmds.select(cmds.ls(self.houseGen.housename+"*"))        
-        cmds.delete()
+        self.houseGen.clear_houses()
 
     @QtCore.Slot()
     def cancel(self):
@@ -190,6 +189,10 @@ class House():
         self.number_of_doors = 1
         self.housename = "House"
     
+    def clear_houses(self):
+        cmds.select(cmds.ls(self.houseGen.housename+"*"))        
+        cmds.delete()
+
     def get_height_of_house(self):
         return self.wall_height * self.number_of_floors
 
