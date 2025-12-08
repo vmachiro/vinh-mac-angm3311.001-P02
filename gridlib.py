@@ -116,7 +116,8 @@ class Grid():
     def place_house(self):
         house1 = hs.House()
         house1.number_of_houses = self.number_of_houses
-        houses = house1.build()
+        houses = []
+        houses.append(house1.build())
         return houses
         
     def rotate_house(self, house_z_pos):
@@ -129,10 +130,15 @@ class Grid():
     def build_grid(self):
         grid_list = []
 
-        row = self.place_house()
-        print(str(row))
-        cmds.group(row, name="row")
-        grid_list.append(row)
+        row = self.place_house() # save this into an object that can be added to the list           
+        # the row is returning 'NONE'. 
+        # this means we need to return the houses 
+        # then put them into another list 
+        # and then group that list into one row.
+        # the row should be parented to "grid" if the list of all the rows doesn't work
+        print("'row' is storing: " + str(row))
+        cmds.group(name="row", parent=self.grpname)
+        grid_list.append("row")
 
         for scale_num in range(self.number_of_rows-1):
             current_row = cmds.duplicate("row")[0]
