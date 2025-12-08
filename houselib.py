@@ -15,7 +15,6 @@ def get_maya_main_win():
     return wrapInstance(int(main_win), QtWidgets.QWidget)
 
 class HouseGenWin(QtWidgets.QDialog):
-    """House Window Class"""
 
     def __init__(self):
         # runs the init code of the parent QDialog class
@@ -214,7 +213,6 @@ class House():
                                     depth = self.house_width,
                                     name = "housebody")
         cmds.xform(xform, translation = [0,self.get_height_of_house()/2,0])          
-        
         return xform
 
     def mkwindows(self):
@@ -249,9 +247,7 @@ class House():
 
                 if floor_num > 0:
                     self.transform_window_up(floor_num, xform, world_pos) 
-                
                 window_GRP.append(xform)  
-
         return window_GRP
 
     def transform_window_up(self, floor_num, xform, world_pos):
@@ -276,12 +272,10 @@ class House():
                                         width = self.house_width/10,
                                         depth = .5,
                                         name = "door"+str(door_num))
-            
             self.transform_door(xform)
             
             if door_num > 0:
                 self.transform_door_to_back(xform)
-            
             door_GRP.append(xform)
         
         return door_GRP
@@ -291,17 +285,14 @@ class House():
                                     width = self.house_width*1.25,
                                     depth = self.house_width*1.25,
                                     name = "roof")
-
         cmds.xform(xform, translation = [0,self.get_height_of_house(),0])
-
         return xform
     
     def create_plane(self, num_of_houses, house_width):
-        scale = house_width*num_of_houses
         xform, shape = cmds.polyPlane(sx=3,
                                     sy=3,
-                                    w=(scale)*2,
-                                    h=(scale)*2,
+                                    w=house_width*2,
+                                    h=house_width*2,
                                     name = "plane")
         return xform
 
