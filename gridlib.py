@@ -103,8 +103,6 @@ class GridGenWin(QtWidgets.QDialog):
         self.btn_layout.addWidget(self.cancel_btn)
         self.main_layout.addLayout(self.btn_layout)
 
-    
-
 
 class Grid():
     def __init__(self):
@@ -128,16 +126,20 @@ class Grid():
         self.place_house()
         cmds.select( all=True )
         cmds.group( n='row' )
+        cmds.makeIdentity('row', apply=True, translate=True, rotate=True, 
+                            scale=True, normal=False, preserveNormals=True)        
 
         for scale_num in range(self.number_of_rows-1):
-            cmds.duplicate( st=True )
+            cmds.duplicate('row')
+            cmds.select('row')
             self.transform_row()
-            cmds.select(all=True)
-         
+        
         cmds.select( all=True )
         cmds.group( n=self.grpname )
         cmds.makeIdentity(self.grpname, apply=True, translate=True, rotate=True, 
                             scale=True, normal=False, preserveNormals=True)
+        
+
 
 # POLISH:
 # figure out house randomization
