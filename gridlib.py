@@ -117,7 +117,6 @@ class Grid():
         house1 = hs.House()
         house1.number_of_houses = self.number_of_houses
         houses = house1.build()
-        print(str(houses))
         return houses
         
     def rotate_house(self, house_z_pos):
@@ -131,15 +130,15 @@ class Grid():
         grid_list = []
 
         row = self.place_house()
+        print(str(row))
+        cmds.group(row, name="row")
         grid_list.append(row)
-        print(str(grid_list))
 
         for scale_num in range(self.number_of_rows-1):
-            current_row = cmds.duplicate("Grid|row")[0]
+            current_row = cmds.duplicate("row")[0]
             self.transform_row(current_row)
             grid_list.append(current_row)
 
-        print(str(grid_list))
         cmds.group( grid_list, n=self.grpname )
         cmds.makeIdentity(self.grpname, apply=True, translate=True, rotate=True, 
                             scale=True, normal=False, preserveNormals=True)
