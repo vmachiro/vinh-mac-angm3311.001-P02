@@ -339,14 +339,13 @@ class Grid():
         cmds.move( z_pos, z=True )
 
     def transform_row(self, current_row):
-        cmds.xform( current_row, translation = [0,0,10] )
+        cmds.xform( current_row, translation = [0,0,-10] )
 
     def build_grid(self):
         grid_list = []
         
         first = self.place_house()
         grid_list.append(first)
-
         cmds.group(grid_list, name=self.grpname)
 
         for scale_num in range(self.number_of_rows-1):
@@ -357,7 +356,6 @@ class Grid():
 
 # POLISH:
 # figure out house randomization
-# GUI should call the house generator at some point with a button, so that the user can fine tune how the houses look
 
 if __name__ == "__main__":
     pass
