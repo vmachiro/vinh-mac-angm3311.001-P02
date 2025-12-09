@@ -291,7 +291,7 @@ class House():
         cmds.xform(xform, translation = [0,self.get_height_of_house(),0])
         return xform
     
-    def create_plane(self, num_of_houses, house_width):
+    def create_plane(self, house_width):
         xform, shape = cmds.polyPlane(sx=3,
                                     sy=3,
                                     w=house_width*2,
@@ -323,7 +323,7 @@ class House():
             housebody = self.mkhousebody()
             house_things.append(housebody)
             
-            plane = self.create_plane(self.number_of_houses,self.house_width)
+            plane = self.create_plane(self.house_width)
             house_things.append(plane)
             
             if self.roof_height != 0:
