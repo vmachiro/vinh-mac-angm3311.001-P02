@@ -117,10 +117,8 @@ class Grid():
         house1 = hs.House()
         house1.number_of_houses = self.number_of_houses
 
-        houses = []
         houses = house1.build()
-        print(houses)
-        return str(houses)
+        return houses
         
     def rotate_house(self, house_z_pos):
         z_pos = house_z_pos*-1
@@ -133,8 +131,8 @@ class Grid():
         grid_list = []
         row_list = []
 
-        self.place_house()
-        print(f"This is what's being returned from place_house(): " + self.place_house())
+        houses = self.place_house()
+        print(f"This is what's being returned from place_house(): " + houses)
         # returns nothing
         # this means i have to grab everything and add it to a list either when it's made 
         # or iterate through the objects named House in the scene and group them as a row
