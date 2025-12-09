@@ -343,23 +343,33 @@ class Grid():
 
     def build_grid(self):
         grid_list = []
-        
+
+        road = self.build_road()
+        grid_list.append(road)
+
         first = self.place_house()
         grid_list.append(first)
         cmds.group(grid_list, name=self.grpname)
 
         for row_num in range(self.number_of_rows-1):
             current_row = cmds.duplicate(self.grpname+"|row")[0]
-            grid_list.append(current_row)   
             self.transform_row(current_row, row_num+1)
             cmds.makeIdentity(current_row, apply=True, translate=True, rotate=True, 
                           scale=True, normal=False, preserveNormals=True)
-
+        
+        
     def build_road(self):
         """makes roads between the houses"""
         # TODO:
-        # make the plane/cube that is the road tile. length is probably number_of_houses*house_width*spacing(which should be 1.5)
+        # make the plane/cube that is the road tile. 
+        # length is probably number_of_houses*house_width*spacing(which should be 1.5)
+        xform, shape = cmds.polyCube(height= 0.5,
+                                    width = 1,
+                                    depth = 0.5,
+                                    name = "road")
+
         # transform it to be between the houses or get the rows to have an even split in the center for the road
+        return xform
 
 # POLISH:
 # figure out house randomization
