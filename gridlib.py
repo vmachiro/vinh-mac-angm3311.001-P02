@@ -308,9 +308,7 @@ class House():
             cmds.makeIdentity(house_name, apply=True, translate=True, rotate=True, 
                             scale=True, normal=False, preserveNormals=True)
             row_list.append(house_name)
-        print(row_list)
-        return row_list
-            
+        cmds.group(row_list, name="row")            
 
 class Grid():
     def __init__(self):
