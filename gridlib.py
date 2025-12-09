@@ -281,7 +281,8 @@ class House():
 
     def build_house(self):
         house_things = []
-
+        row_list = []
+        
         for house_num in range(self.number_of_houses):
             house_name = self.housename+str(house_num) 
             housebody = self.mkhousebody()
@@ -306,6 +307,9 @@ class House():
             house_things.clear()
             cmds.makeIdentity(house_name, apply=True, translate=True, rotate=True, 
                             scale=True, normal=False, preserveNormals=True)
+            row_list.append(house_name)
+        print(row_list)
+        return row_list
             
 
 class Grid():
@@ -340,24 +344,14 @@ class Grid():
 
     def build_grid(self):
         grid_list = []
-        row_list = []
-
-        houses = self.place_house()
-        # returns nothing
         # this means i have to grab everything and add it to a list either when it's made 
-        # or iterate through the objects named House in the scene and group them as a row
-
-        for i in range(self.number_of_houses):
-            # row_list.append(i)
-            i += 1
-        #cmds.group(row_list, name="row")
         
+        self.place_house()
+
         for scale_num in range(self.number_of_rows-1):
-            current_row = cmds.duplicate("House0")[0]
+            current_row = cmds.duplicate("Grid|row")[0]
             self.transform_row(current_row)     
             grid_list.append(current_row)   
-
-        cmds.group(grid_list, name=self.grpname)
 
 
 # POLISH:
