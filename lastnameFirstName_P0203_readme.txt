@@ -1,0 +1,2 @@
+This tool creates multiple houses in rows with spacing for roads. The houses are customizable by their number of windows, floors, and roof heights. The number of houses and rows can also be customized.
+This tool is intended for use by environment designers or background layouts. Specifically, it is to be used for far away shots to populate the background.
