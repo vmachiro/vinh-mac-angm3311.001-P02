@@ -309,6 +309,7 @@ class House():
                             scale=True, normal=False, preserveNormals=True)
             row_list.append(house_name)
         cmds.group(row_list, name="row")            
+        return "row"
 
 class Grid():
     def __init__(self):
@@ -330,8 +331,8 @@ class Grid():
         house1.roof_height = self.roof_height
         house1.number_of_windows = self.number_of_windows 
 
-        houses = house1.build_house()
-        return houses
+        house_row = house1.build_house()
+        return house_row
         
     def rotate_house(self, house_z_pos):
         z_pos = house_z_pos*-1
@@ -342,9 +343,11 @@ class Grid():
 
     def build_grid(self):
         grid_list = []
-        # this means i have to grab everything and add it to a list either when it's made 
         
-        self.place_house()
+        first = self.place_house()
+        grid_list.append(first)
+
+        cmds.group(grid_list, name=self.grpname)
 
         for scale_num in range(self.number_of_rows-1):
             current_row = cmds.duplicate("Grid|row")[0]
