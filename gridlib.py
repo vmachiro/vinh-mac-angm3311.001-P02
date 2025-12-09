@@ -355,6 +355,11 @@ class Grid():
             cmds.makeIdentity(current_row, apply=True, translate=True, rotate=True, 
                           scale=True, normal=False, preserveNormals=True)
 
+    def build_road(self):
+        """makes roads between the houses"""
+        # TODO:
+        # make the plane/cube that is the road tile. length is probably number_of_houses*house_width*spacing(which should be 1.5)
+        # transform it to be between the houses or get the rows to have an even split in the center for the road
 
 # POLISH:
 # figure out house randomization
