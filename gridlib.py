@@ -338,8 +338,8 @@ class Grid():
         z_pos = house_z_pos*-1
         cmds.move( z_pos, z=True )
 
-    def transform_row(self, current_row):
-        cmds.xform( current_row, translation = [0,0,-10] )
+    def transform_row(self, current_row, row_num):
+        cmds.xform( current_row, translation = [0,0,10*row_num] )
 
     def build_grid(self):
         grid_list = []
@@ -348,10 +348,13 @@ class Grid():
         grid_list.append(first)
         cmds.group(grid_list, name=self.grpname)
 
-        for scale_num in range(self.number_of_rows-1):
+        for row_num in range(self.number_of_rows-1):
+            print(row_num)
             current_row = cmds.duplicate("Grid|row")[0]
-            self.transform_row(current_row)     
             grid_list.append(current_row)   
+            self.transform_row(current_row, row_num) # each row needs to be a stacking, growing distance from the last    
+            cmds.makeIdentity(current_row, apply=True, translate=True, rotate=True, 
+                          scale=True, normal=False, preserveNormals=True)
 
 
 # POLISH:
