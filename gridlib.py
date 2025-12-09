@@ -128,16 +128,23 @@ class Grid():
 
     def build_grid(self):
         grid_list = []
+        row_list = []
+        i = 0
 
-        current_row = self.place_house()   
-        row_name = cmds.duplicate("House0")[0]
-        grid_list.append(row_name)
-        cmds.group(grid_list, name=self.grpname)
+        self.place_house() 
 
+        for i in range(self.number_of_houses):
+            row_list.append("House"[i])
+            i += 1
+        
+        cmds.group(row_list, name="row")
+        
         for scale_num in range(self.number_of_rows-1):
-            current_row = cmds.duplicate(str(self.grpname)+"|row")[0]
-            self.transform_row(current_row)        
-
+            current_row = cmds.duplicate("row")[0]
+            self.transform_row(current_row)     
+            grid_list.append(current_row)   
+        
+        cmds.group(grid_list, name=self.grpname)
 
 # POLISH:
 # figure out house randomization
