@@ -116,8 +116,11 @@ class Grid():
     def place_house(self):
         house1 = hs.House()
         house1.number_of_houses = self.number_of_houses
-        house1.build()
-        return
+
+        houses = []
+        houses = house1.build()
+        print(houses)
+        return str(houses)
         
     def rotate_house(self, house_z_pos):
         z_pos = house_z_pos*-1
@@ -129,22 +132,25 @@ class Grid():
     def build_grid(self):
         grid_list = []
         row_list = []
-        i = 0
 
-        self.place_house() 
+        self.place_house()
+        print(f"This is what's being returned from place_house(): " + self.place_house())
+        # returns nothing
+        # this means i have to grab everything and add it to a list either when it's made 
+        # or iterate through the objects named House in the scene and group them as a row
 
         for i in range(self.number_of_houses):
-            row_list.append("House"[i])
+            # row_list.append(i)
             i += 1
-        
-        cmds.group(row_list, name="row")
+        #cmds.group(row_list, name="row")
         
         for scale_num in range(self.number_of_rows-1):
-            current_row = cmds.duplicate("row")[0]
+            current_row = cmds.duplicate("House0")[0]
             self.transform_row(current_row)     
             grid_list.append(current_row)   
-        
+        print("This is what's stored in grid_list: " + grid_list)
         cmds.group(grid_list, name=self.grpname)
+
 
 # POLISH:
 # figure out house randomization
