@@ -341,6 +341,7 @@ class Grid():
     def transform_row(self, current_row, row_num):
         cmds.xform( current_row, translation = [0,0,10*row_num] )
 
+
     def build_grid(self):
         grid_list = []
         
@@ -352,7 +353,7 @@ class Grid():
             print(row_num)
             current_row = cmds.duplicate("Grid|row")[0]
             grid_list.append(current_row)   
-            self.transform_row(current_row, row_num) # each row needs to be a stacking, growing distance from the last    
+            self.transform_row(current_row, row_num+1) # each row needs to be a stacking, growing distance from the last    
             cmds.makeIdentity(current_row, apply=True, translate=True, rotate=True, 
                           scale=True, normal=False, preserveNormals=True)
 
