@@ -339,7 +339,7 @@ class Grid():
         cmds.move( z_pos, z=True )
 
     def transform_row(self, current_row):
-        cmds.move( current_row, 10, z=True )
+        cmds.xform( current_row, translation = [0,0,10] )
 
     def build_grid(self):
         grid_list = []
