@@ -117,6 +117,7 @@ class Grid():
         house1 = hs.House()
         house1.number_of_houses = self.number_of_houses
         house1.build()
+        return
         
     def rotate_house(self, house_z_pos):
         z_pos = house_z_pos*-1
@@ -128,17 +129,14 @@ class Grid():
     def build_grid(self):
         grid_list = []
 
-        self.place_house() # save this into an object that can be added to the list         
+        current_row = self.place_house()   
         row_name = cmds.duplicate("House0")[0]
         grid_list.append(row_name)
-        # Grid is for some reason being made to parent the window_GRP of the house.
-        # instead i
         cmds.group(grid_list, name=self.grpname)
 
         for scale_num in range(self.number_of_rows-1):
             current_row = cmds.duplicate(str(self.grpname)+"|row")[0]
             self.transform_row(current_row)        
-        
 
 
 # POLISH:
