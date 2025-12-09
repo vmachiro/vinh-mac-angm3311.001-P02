@@ -319,6 +319,7 @@ class Grid():
         self.number_of_houses = 1
         self.roof_height = 1
         self.number_of_windows = 4
+        self.roads_enabled = False
 
     def clear_grid(self):
         cmds.select(cmds.ls(self.grpname+"*"))        
@@ -333,20 +334,27 @@ class Grid():
 
         house_row = house1.build_house()
         return house_row
-        
-    def rotate_house(self, house_z_pos):
-        z_pos = house_z_pos*-1
-        cmds.move( z_pos, z=True )
 
     def transform_row(self, current_row, row_num):
         cmds.xform( current_row, translation = [0,0,10*row_num] )
+  
+    def build_road(self):
+        xform, shape = cmds.polyCube(height= 1,
+                                    width = self.number_of_houses*3,
+                                    depth = self.number_of_rows*3,
+                                    name = "road")
 
+        # transform it to be between the houses or get the rows to have an even split in the center for the road
+
+        return xform
+    
     def build_grid(self):
         grid_list = []
-
-        road = self.build_road()
-        grid_list.append(road)
-
+        
+        if self.roads_enabled==True:
+            road = self.build_road()
+            grid_list.append(road)
+        
         first = self.place_house()
         grid_list.append(first)
         cmds.group(grid_list, name=self.grpname)
@@ -357,19 +365,6 @@ class Grid():
             cmds.makeIdentity(current_row, apply=True, translate=True, rotate=True, 
                           scale=True, normal=False, preserveNormals=True)
         
-        
-    def build_road(self):
-        """makes roads between the houses"""
-        # TODO:
-        # make the plane/cube that is the road tile. 
-        # length is probably number_of_houses*house_width*spacing(which should be 1.5)
-        xform, shape = cmds.polyCube(height= 0.5,
-                                    width = 1,
-                                    depth = 0.5,
-                                    name = "road")
-
-        # transform it to be between the houses or get the rows to have an even split in the center for the road
-        return xform
 
 # POLISH:
 # figure out house randomization
