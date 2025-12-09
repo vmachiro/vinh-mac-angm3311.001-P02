@@ -128,24 +128,16 @@ class Grid():
     def build_grid(self):
         grid_list = []
 
-        row = self.place_house() # save this into an object that can be added to the list           
-        # the row is returning 'NONE'. 
-        # this means we need to return the houses 
-        # then put them into another list 
-        # and then group that list into one row.
-        # the row should be parented to "grid" if the list of all the rows doesn't work
-        print("'row' is storing: " + str(row))
-        cmds.group(name="row", parent=self.grpname)
-        grid_list.append("row")
+        self.place_house() # save this into an object that can be added to the list         
+        row_name = cmds.duplicate("House0")[0]
+        grid_list.append(row_name)
+        # Grid is for some reason being made to parent the window_GRP of the house.
+        # instead i
+        cmds.group(grid_list, name=self.grpname)
 
         for scale_num in range(self.number_of_rows-1):
-            current_row = cmds.duplicate("row")[0]
-            self.transform_row(current_row)
-            grid_list.append(current_row)
-
-        cmds.group( grid_list, n=self.grpname )
-        cmds.makeIdentity(self.grpname, apply=True, translate=True, rotate=True, 
-                            scale=True, normal=False, preserveNormals=True)
+            current_row = cmds.duplicate(str(self.grpname)+"|row")[0]
+            self.transform_row(current_row)        
         
 
 
