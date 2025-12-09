@@ -319,7 +319,7 @@ class Grid():
         self.number_of_houses = 1
         self.roof_height = 1
         self.number_of_windows = 4
-        self.roads_enabled = False
+        self.roads_enabled = True
 
     def clear_grid(self):
         cmds.select(cmds.ls(self.grpname+"*"))        
@@ -331,21 +331,22 @@ class Grid():
         house1.number_of_houses = self.number_of_houses
         house1.roof_height = self.roof_height
         house1.number_of_windows = self.number_of_windows 
-
         house_row = house1.build_house()
+
         return house_row
 
     def transform_row(self, current_row, row_num):
+        if row_num%2 == 0:
+            row_num = row_num*-1
         cmds.xform( current_row, translation = [0,0,10*row_num] )
   
     def build_road(self):
         xform, shape = cmds.polyCube(height= 1,
-                                    width = self.number_of_houses*3,
-                                    depth = self.number_of_rows*3,
+                                    width = self.number_of_houses*6,
+                                    depth = self.number_of_rows*6,
                                     name = "road")
-
-        # transform it to be between the houses or get the rows to have an even split in the center for the road
-
+        
+        cmds.xform( "road", translation = [10,0,-10] )
         return xform
     
     def build_grid(self):
